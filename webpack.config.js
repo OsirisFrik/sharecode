@@ -17,9 +17,10 @@ module.exports = {
   plugins: [
     new HtmlWebpackkPlugin({
       template: './client/index.html',
-      base: '/src'
+      base: '/src',
+      analytics: process.env.GG_ANALYTICS
     }),
-    new webpack.EnvironmentPlugin(['GH_CLIENT', 'GH_SECRET'])
+    new webpack.EnvironmentPlugin(['GH_CLIENT', 'GH_SECRET', 'GG_ANALYTICS'])
   ],
   module: {
     rules: [
