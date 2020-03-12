@@ -51,8 +51,8 @@ $ yarn server:dev
 - [x] Live edit
 - [x] Merge on new writer joined in room
 - [x] List writers
-- [] Display writer name
-- [] Github Login
-- [] Update users
-- [] Multi cursors
-- [] Share button
+- [ ] Display writer name
+- [ ] Github Login
+- [ ] Update users
+- [ ] Multi cursors
+- [ ] Share button
