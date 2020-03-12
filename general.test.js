@@ -5,7 +5,8 @@ test('ENV', () => {
   let envs = [
     'SESSION_SECRET',
     'GH_CLIENT',
-    'GH_SECRET'
+    'GH_SECRET',
+    'GG_ANALYTICS'
   ]
 
   for (let i = 0; i < envs.length; i++) {

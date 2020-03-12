@@ -10,23 +10,16 @@ $ yarn install
 
 ### Env files
 
-#### Server
-
 ```env
 PORT=
 SESSION_SECRET=
 
 # Github
 GH_CLIENT=
-GH_SECRET
-```
-
-#### Client
-
-```env
-# Github
-GH_CLIENT=
 GH_SECRET=
+
+# Analytics
+GG_ANALYTICS=
 ```
 
 ## Run
