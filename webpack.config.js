@@ -1,6 +1,7 @@
+require('dotenv').config();
 const path = require('path');
 const HtmlWebpackkPlugin = require('html-webpack-plugin');
-const DotEnv = require('dotenv-webpack');
+const webpack = require('webpack');
 
 module.exports = {
   name: 'share-code',
@@ -18,9 +19,7 @@ module.exports = {
       template: './client/index.html',
       base: '/src'
     }),
-    new DotEnv({
-      path: 'client.env'
-    })
+    new webpack.EnvironmentPlugin(['GH_CLIENT', 'GH_SECRET'])
   ],
   module: {
     rules: [

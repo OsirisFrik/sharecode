@@ -5,3 +5,5 @@ public/src/*
 
 client.env
 .env
+
+yarn-error.log
