@@ -7,6 +7,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
+    "test": "jest",
     "build": "npx webpack --config webpack.config.js",
     "build:watch": "nodemon --watch client/* --ext html,js --exec \"yarn build\"",
     "server:dev": "nodemon --inspect server.js",
