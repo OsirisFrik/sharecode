@@ -1,0 +1,20 @@
+body {
+  margin: 0 !important;
+  height: 100vh;
+}
+
+.CodeMirror {
+  height: 100vh !important;
+}
+
+.users {
+  position: absolute;
+  z-index: 1000;
+  right: 2%;
+  bottom: 2%;
+}
+
+.avatar {
+  border-radius: 100%;
+  width: 50px;
+}
