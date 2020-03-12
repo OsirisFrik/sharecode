@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
   }));
 
 server.listen(process.env.PORT, () => {
-  console.log(`Server running on http://${process.env.HOST}:${process.env.PORT}`);
+  console.log(`Server running on http://${process.env.HOST || 'localhost'}:${process.env.PORT}`);
 });
 
 app.get('/', (req, res) => {
