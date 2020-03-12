@@ -22,8 +22,9 @@ const socket = io.connect({
 });
 
 function init() {
-  let btn = document.getElementById('login');
-  btn.onclick = login;
+  // WIP
+  // let btn = document.getElementById('login');
+  // btn.onclick = login;
 }
 
 function login() {

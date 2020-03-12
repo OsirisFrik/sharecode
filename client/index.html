@@ -4,10 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ShareCode</title>
+  <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.analytics %>">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=<%= htmlWebpackPlugin.options.analytics %>"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', '<%= htmlWebpackPlugin.options.analytics %>');
+  </script>
 </head>
 <body>
   <div id="users" class="users">
-    <button id="login">Login</button>
+    <!-- WIP LOGIN -->
+    <!-- <button id="login">Login</button> -->
   </div>
 </body>
 </html>
