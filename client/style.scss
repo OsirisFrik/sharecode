@@ -13,13 +13,14 @@ body {
 .users {
   position: absolute;
   z-index: 1000;
-  right: 2%;
+  right: 0%;
   bottom: 2%;
 }
 
 .avatar {
   border-radius: 100%;
   width: 50px;
+  margin-right: 10px;
 }
 
 .notification {

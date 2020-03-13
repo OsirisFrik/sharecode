@@ -27,6 +27,7 @@ function error(message, timeout) {
 
 
 function info(message, timeout) {
+  console.trace('aqui')
   return createNotification(message, 'info', timeout);
 }
 
@@ -43,5 +44,8 @@ function removeNotification(notification) {
 }
 
 createNotification.success = success;
+createNotification.info = info;
+createNotification.error = error;
+createNotification.warning = warning;
 
 export default createNotification;

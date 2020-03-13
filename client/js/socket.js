@@ -18,9 +18,10 @@ class Socket extends EventEmitter {
     });
 
     this.socket.on('connect', (data) => this.onConnect(data));
-    this.socket.on('userjoin', (data) => this.onUserJoin(data));
+    this.socket.on('userJoin', (data) => this.onUserJoin(data));
     this.socket.on('merge', (data) => this.onMerge(data));
     this.socket.on('newEditor', (data) => this.onNewEditor(data));
+    this.socket.on('removeEditor', (data) => this.onRemoveEditor(data));
     this.socket.on('+input', (data) => this.onAddInput(data));
     this.socket.on('+delete', (data) => this.onRemoveInput(data));
 
@@ -40,8 +41,28 @@ class Socket extends EventEmitter {
 
   onUserJoin(data) {
     if (data.socketId !== this.socket.id) {
+      Notification.info(`${data.username || 'NO NAME'} joined`);
       Users.dispatch({
         type: 'add',
+        user: data
+      });
+    }
+  }
+
+  onRemoveEditor(data) {
+    let users = Users.getState();
+    let user;
+    for (let i = 0; i < users.length; i++) {
+      if (users[i].socketId === data) {
+        user = users[i];
+        break;
+      }
+    }
+    if (user) {
+      Notification.info(`${user.username || 'NO NAME'} disconnected`);
+      this.emit('removeUser', user);
+      Users.dispatch({
+        type: 'remove',
         user: data
       });
     }
@@ -69,6 +90,10 @@ class Socket extends EventEmitter {
   onMerge(data) {
     if (data.solicitor === this.socket.id) {
       this.emit('merge', data.value);
+      Users.dispatch({
+        type: 'add',
+        user: data.user
+      })
     }
   }
 
@@ -82,7 +107,7 @@ class Socket extends EventEmitter {
     if (sender !== this.socket.id) {
       this.emit('+delete', data);
     }
-  }
+  } 
 }
 
 export default Socket;

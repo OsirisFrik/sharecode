@@ -1,7 +1,7 @@
-import CodeMirror from 'codemirror';
 import Socket from './js/socket';
 import { User, Users } from './js/store';
-import Notification from './js/ui/notifications';
+import Editor from './js/editor';
+import { removeUser, loadUsers } from './js/ui/users';
 
 // Styles
 import './style.scss';
@@ -11,39 +11,33 @@ import 'codemirror/theme/material-darker.css';
 import 'codemirror/mode/javascript/javascript';
 
 User.subscribe(() => {
-  console.log(User.getState());
+  let user = User.getState();
+  if (!user.username) {
+    let username = prompt('Username', 'anon');
+    User.dispatch({
+      type: 'update',
+      user: {
+        ...user,
+        username,
+        avatar: `https://www.gravatar.com/avatar/${Date.now()}?&d=identicon&r=PG`
+      }
+    });
+  }
+  loadUsers([user]);
 });
-Users.subscribe(() => {
-  console.log(Users.getState());
-})
 
-var users = {};
+const editor = new Editor();
 const room = location.pathname.substring(1);
-const editor = CodeMirror(document.body, {
-  mode: 'javascript',
-  lineNumbers: true,
-  theme: 'material-darker'
-});
-const socket = new Socket(room, editor);
+const socket = new Socket(room);
 
-socket.on('merge', (value) => mergeValue(value));
-socket.on('getEditorValue', (cb) => {
-  cb(editor.getValue());
+editor.on('change', (change) => {
+  if (['+input', '+delete'].includes(change.origin)) {
+    socket.socket.emit(change.origin, change);
+  }
 });
 
-function mergeValue(value) {
-  editor.setValue(value);
-}
-
-editor.on('change', (instance, change) => {
-  socket.socket.emit(change.origin, change);
-});
-
-socket.on('+input', remoteModify);
-socket.on('+delete', remoteModify);
-
-function remoteModify(value) {
-  let cursor = editor.getCursor();
-  editor.replaceRange(value.text, value.from, value.to);
-  editor.setCursor(cursor);
-}
+socket.on('+input', editor.remoteEdit);
+socket.on('+delete', editor.remoteEdit);
+socket.on('merge', (value) => editor.setValue(value));
+socket.on('getEditorValue', (cb) => cb(editor.getValue()));
+socket.on('removeUser', (user) => removeUser(user));

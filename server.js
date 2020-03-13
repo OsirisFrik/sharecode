@@ -71,6 +71,10 @@ io.on('connection', socket => {
   });
 
   socket.on('updateProfile', user => {
-    io.to(room).emit('userjoin', user);
+    io.to(room).emit('userJoin', user);
   });
+
+  socket.on('disconnect', () => {
+    io.to(room).emit('removeEditor', socket.id);
+  })
 });
