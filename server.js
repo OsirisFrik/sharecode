@@ -65,8 +65,12 @@ io.on('connection', socket => {
     });
   })
   io.to(room).emit('newEditor', socket.id);
-  socket.on('toNewEditor', ({ solicitor, value }) => {
-    io.to(solicitor).emit('merge', { solicitor, value });
+
+  socket.on('toNewEditor', ({ solicitor, value, user }) => {
+    io.to(solicitor).emit('merge', { solicitor, value, user });
   });
-  socket.on('updateProfile', user => io.to(room).emit('addUser', { [socket.id]: user }));
+
+  socket.on('updateProfile', user => {
+    io.to(room).emit('userjoin', user);
+  });
 });
