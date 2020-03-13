@@ -1,103 +1,43 @@
-import io from 'socket.io-client';
-import CodeMirror from 'codemirror';
-import { addUser } from './users';
+import Socket from './js/socket';
+import { User, Users } from './js/store';
+import Editor from './js/editor';
+import { removeUser, loadUsers } from './js/ui/users';
 
 // Styles
-import './style.css';
+import './style.scss';
+import 'animate.css/animate.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material-darker.css';
 import 'codemirror/mode/javascript/javascript';
 
-var users = {};
-const room = location.pathname.substring(1);
-const editor = CodeMirror(document.body, {
-  mode: 'javascript',
-  lineNumbers: true,
-  theme: 'material-darker'
-});
-const socket = io.connect({
-  query: {
-    room
-  }
-});
-
-function init() {
-  // WIP
-  // let btn = document.getElementById('login');
-  // btn.onclick = login;
-}
-
-function login() {
-  location.href = `https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env.GH_CLIENT}`
-}
-
-socket.on('connect', () => {
-  console.log('connected');
-  let name = localStorage.getItem('username');
-
-  if (!name) {
-    name = prompt('Username', 'dummy');
-    localStorage.setItem('username', name);
-  }
-
-  users[socket.id] = {
-    name,
-    img: `https://www.gravatar.com/avatar/${Date.now()}?&d=identicon&r=PG`
-  }
-  socket.emit('updateProfile', users[socket.id]);
-});
-
-
-editor.on('change', (instance, change) => {
-  socket.emit(change.origin, change);
-});
-
-socket.on('+input', remoteAdd);
-socket.on('+delete', remoteAdd);
-socket.on('newEditor', newEditor);
-socket.on('merge', merge);
-socket.on('addUser', user => {
-  Object.assign(users, user);
-  console.log(user);
-  addUser(user[Object.keys(user)[0]]);
-});
-
-/**
- * @method remoteAdd
- * @param { Object } data
- * @param { String } data.sender
- * @param { CodeMirror.EditorChangeLinkedList } data.data
- */
-
-function remoteAdd({ sender, data }) {
-  if (sender !== socket.id) {
-    let cursor = editor.getCursor();
-    editor.replaceRange(data.text, data.from, data.to);
-    resetCursor(cursor);
-  }
-}
-
-function newEditor(solicitor) {
-  if (solicitor !== socket.id) {
-    let value = editor.getValue();
-    socket.emit('toNewEditor', {
-      value,
-      solicitor
+User.subscribe(() => {
+  let user = User.getState();
+  if (!user.username) {
+    let username = prompt('Username', 'anon');
+    User.dispatch({
+      type: 'update',
+      user: {
+        ...user,
+        username,
+        avatar: `https://www.gravatar.com/avatar/${Date.now()}?&d=identicon&r=PG`
+      }
     });
   }
-}
+  loadUsers([user]);
+});
 
-function merge({ sender, value }) {
-  if (sender !== socket.id) {
-    editor.setValue(value);
+const editor = new Editor();
+const room = location.pathname.substring(1);
+const socket = new Socket(room);
+
+editor.on('change', (change) => {
+  if (['+input', '+delete'].includes(change.origin)) {
+    socket.socket.emit(change.origin, change);
   }
-}
+});
 
-function resetCursor(prev) {
-  // editor.setCursor(prev);
-}
-
-window.socket = socket;
-window.editor = editor;
-
-window.onload = init();
+socket.on('+input', editor.remoteEdit);
+socket.on('+delete', editor.remoteEdit);
+socket.on('merge', (value) => editor.setValue(value));
+socket.on('getEditorValue', (cb) => cb(editor.getValue()));
+socket.on('removeUser', (user) => removeUser(user));
