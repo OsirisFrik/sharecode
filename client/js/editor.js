@@ -9,7 +9,8 @@ class Editor extends EventEmitter {
     editor = this.editor = CodeMirror(document.body, {
       mode: 'javascript',
       lineNumbers: true,
-      theme: 'material-darker'
+      theme: 'material-darker',
+      tabSize: 2
     });
 
     this.editor.on('change', (_inst, change) => this.emit('change', change));

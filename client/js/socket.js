@@ -24,6 +24,7 @@ class Socket extends EventEmitter {
     this.socket.on('removeEditor', (data) => this.onRemoveEditor(data));
     this.socket.on('+input', (data) => this.onAddInput(data));
     this.socket.on('+delete', (data) => this.onRemoveInput(data));
+    this.socket.on('disconnect', (data) => this.onDisconnect(data));
 
     User.subscribe(() => this.emitUpdateMyUser());
   }
@@ -36,7 +37,12 @@ class Socket extends EventEmitter {
       user: {
         socketId: this.socket.id
       }
-    })
+    });
+  }
+
+  onDisconnect(data) {
+    Notification.error('Disconnected!');
+    this.emit('disconnected');
   }
 
   onUserJoin(data) {
