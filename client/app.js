@@ -1,10 +1,13 @@
 import Socket from './js/socket';
 import { User, Users } from './js/store';
 import Editor from './js/editor';
-import { removeUser, loadUsers } from './js/ui/users';
+import { removeUser, meUser, removeUsers } from './js/ui/users';
+import './js/ui/login';
+import './js/github';
 
 // Styles
-import './style.scss';
+import './style/style.scss';
+import './style/buttons-min.css';
 import 'animate.css/animate.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material-darker.css';
@@ -23,7 +26,7 @@ User.subscribe(() => {
       }
     });
   }
-  loadUsers([user]);
+  meUser(user);
 });
 
 const editor = new Editor();
@@ -41,3 +44,4 @@ socket.on('+delete', editor.remoteEdit);
 socket.on('merge', (value) => editor.setValue(value));
 socket.on('getEditorValue', (cb) => cb(editor.getValue()));
 socket.on('removeUser', (user) => removeUser(user));
+socket.on('disconnected', () => removeUsers());

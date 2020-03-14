@@ -27,7 +27,6 @@ function error(message, timeout) {
 
 
 function info(message, timeout) {
-  console.trace('aqui')
   return createNotification(message, 'info', timeout);
 }
 

@@ -34,6 +34,8 @@ function users(users = [], action) {
         users.splice(user, 1);
       }
       return users;
+    case 'clear':
+      return [];
     default:
       return users;
   }

@@ -1,5 +1,6 @@
 import tippy from 'tippy.js';
 import { Users, User } from '../store';
+import { addLogin } from './login';
 
 import 'tippy.js/dist/tippy.css';
 
@@ -10,7 +11,6 @@ Users.subscribe(() => {
 });
 
 function loadUsers(users) {
-  console.log(users);
   for (let i = 0; i < users.length; i++) {
     const element = getUser(users[i]);
 
@@ -22,11 +22,11 @@ function loadUsers(users) {
   }
 }
 
-function addUser(user) {
+function addUser(user, classes = []) {
   let img = document.createElement('img');
   img.id = user.socketId,
   img.src = user.avatar || `https://www.gravatar.com/avatar/${Date.now()}?&d=identicon&r=PG`;
-  img.classList.add('avatar');
+  img.classList.add('avatar', ...classes);
   img.alt = user.username;
 
   addTooltip(img, user.username);
@@ -34,16 +34,34 @@ function addUser(user) {
   usersContainer.appendChild(img);
 }
 
-function updateUser(element, user) {
+/**
+ * @method updateUser
+ * @param { HTMLImageElement } element 
+ * @param {*} user 
+ * @param { Array<String> } classes 
+ */
+
+function updateUser(element, user, classes = []) {
   let img = element;
   img.id = user.socketId,
-    img.src = user.avatar || `https://www.gravatar.com/avatar/${Date.now()}?&d=identicon&r=PG`;
-  img.classList.add('avatar');
-  img.alt = user.username
+  img.src = user.avatar || `https://www.gravatar.com/avatar/${Date.now()}?&d=identicon&r=PG`;
+  img.classList.value = `avatar ${classes.join(' ')}`
+  img.alt = user.username;
 
   addTooltip(img, user.username);
 
   usersContainer.appendChild(img);
+}
+
+function removeUsers() {
+  let users = Users.getState();
+  for (let i = 0; i < users.length; i++) {
+    const user = users[i];
+    removeUser(user);
+  }
+  Users.dispatch({
+    type: 'clear'
+  });
 }
 
 function removeUser(user) {
@@ -63,12 +81,20 @@ function getUser(id) {
   return document.getElementById(id);
 }
 
-function getAllUsers() {
-  return document.getElementsByClassName('avatar-remote');
+function meUser(user) {
+  let img = getUser(user.socketId);
+  let old = document.getElementsByClassName('avatar me')
+
+  if (old.length > 0) return updateUser(old[0], user, ['me'])
+  if (!img) addUser(user, ['me']);
+  else updateUser(img, user, ['me']);
 }
 
 export {
   removeUser,
   addUser,
-  loadUsers
+  loadUsers,
+  removeUsers,
+  updateUser,
+  meUser
 }

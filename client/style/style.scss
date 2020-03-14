@@ -47,3 +47,38 @@ body {
     background-color: #f8d435;
   }
 }
+
+.login-btn {
+  position: fixed;
+  z-index: 1000;
+  right: 1%;
+  bottom: 10%;
+}
+
+.modal {
+  position: fixed;
+  z-index: 1100;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #00000031;
+
+  .modal-body {
+    width: 400px;
+    height: 200px;
+    background-color: #ffffff;
+    position: absolute;
+    left: 30vw;
+    top: 10vh;
+
+    h3.modal-title {
+      text-align: center;
+      font-size: 30px;
+    }
+
+    .modal-btn {
+      position: relative;
+      left: 135px;
+    }
+  }
+}
