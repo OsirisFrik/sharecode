@@ -36,7 +36,7 @@ function init(app) {
     });
 
     socket.on('updateProfile', user => {
-      io.to(room).emit('userJoin', user);
+      io.to(room).emit('userUpdate', user);
     });
 
     socket.on('disconnect', () => {

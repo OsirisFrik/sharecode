@@ -1,14 +1,15 @@
 import EventEmitter from 'events';
+import Notification from '../ui/notifications';
 import io from 'socket.io-client';
-import Notification from './ui/notifications';
 import {
   User,
   Users
-} from './store';
+} from '../store';
 
 class Socket extends EventEmitter {
   constructor(room, editor) {
     super();
+    this.emitUpdateUser = true;
     this.room = room;
     this.socket = io.connect({
       query: {
@@ -18,7 +19,7 @@ class Socket extends EventEmitter {
     });
 
     this.socket.on('connect', (data) => this.onConnect(data));
-    this.socket.on('userJoin', (data) => this.onUserJoin(data));
+    this.socket.on('userUpdate', (data) => this.onUserUpdate(data));
     this.socket.on('merge', (data) => this.onMerge(data));
     this.socket.on('newEditor', (data) => this.onNewEditor(data));
     this.socket.on('removeEditor', (data) => this.onRemoveEditor(data));
@@ -45,7 +46,8 @@ class Socket extends EventEmitter {
     this.emit('disconnected');
   }
 
-  onUserJoin(data) {
+  onUserUpdate(data) {
+    console.log('userjon', data);
     if (data.socketId !== this.socket.id) {
       Notification.info(`${data.username || 'NO NAME'} joined`);
       Users.dispatch({
@@ -77,7 +79,13 @@ class Socket extends EventEmitter {
   emitUpdateMyUser() {
     let user = User.getState();
     console.log(user);
-    this.socket.emit('updateProfile', user);
+    if (this.emitUpdateUser) {
+      this.socket.emit('updateProfile', user);
+      this.emitUpdateUser = false;
+      setTimeout(() => {
+        this.emitUpdateUser = true;
+      }, 500);
+    }
   }
 
   onNewEditor(solicitor) {

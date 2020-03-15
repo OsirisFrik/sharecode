@@ -1,6 +1,5 @@
 import tippy from 'tippy.js';
 import { Users, User } from '../store';
-import { addLogin } from './login';
 
 import 'tippy.js/dist/tippy.css';
 
@@ -24,7 +23,7 @@ function loadUsers(users) {
 
 function addUser(user, classes = []) {
   let img = document.createElement('img');
-  img.id = user.socketId,
+  img.id = user.id,
   img.src = user.avatar || `https://www.gravatar.com/avatar/${Date.now()}?&d=identicon&r=PG`;
   img.classList.add('avatar', ...classes);
   img.alt = user.username;
@@ -43,14 +42,12 @@ function addUser(user, classes = []) {
 
 function updateUser(element, user, classes = []) {
   let img = element;
-  img.id = user.socketId,
+  img.id = user.id,
   img.src = user.avatar || `https://www.gravatar.com/avatar/${Date.now()}?&d=identicon&r=PG`;
   img.classList.value = `avatar ${classes.join(' ')}`
   img.alt = user.username;
 
   addTooltip(img, user.username);
-
-  usersContainer.appendChild(img);
 }
 
 function removeUsers() {
@@ -65,7 +62,7 @@ function removeUsers() {
 }
 
 function removeUser(user) {
-  let img = getUser(user.socketId);
+  let img = getUser(user.id);
   if (img) {
     usersContainer.removeChild(img);
   }
@@ -82,7 +79,7 @@ function getUser(id) {
 }
 
 function meUser(user) {
-  let img = getUser(user.socketId);
+  let img = getUser(user.id);
   let old = document.getElementsByClassName('avatar me')
 
   if (old.length > 0) return updateUser(old[0], user, ['me'])

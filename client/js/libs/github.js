@@ -1,9 +1,9 @@
 import cookie from 'cookie-handler';
 import { Octokit } from '@octokit/rest';
-import { User } from './store';
+import { User } from '../store';
 
 let token = cookie.get('github-token', true);
-console.log(token);
+
 if (token) {
   const octokit = new Octokit({
     auth: token,
@@ -17,7 +17,7 @@ if (token) {
       user: {
         avatar: data.avatar_url,
         username: data.name,
-        id: data.id
+        gitId: data.id
       }
     });
   })

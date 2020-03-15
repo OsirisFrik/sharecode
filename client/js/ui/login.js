@@ -38,7 +38,7 @@ function openModalLogin() {
 
 User.subscribe(() => {
   let user = User.getState();
-  if (user.id && document.getElementById('login-btn')) {
+  if (user.gitId && document.getElementById('login-btn')) {
     document.body.removeChild(btnLogin);
   } else {
     document.body.appendChild(btnLogin);
