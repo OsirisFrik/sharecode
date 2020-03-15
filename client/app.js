@@ -4,14 +4,19 @@ import Editor from './js/libs/editor';
 import { removeUser, meUser, removeUsers } from './js/ui/users';
 import './js/ui/login';
 import './js/libs/github';
+import './js/ui/menu';
+
+import '@fortawesome/fontawesome-free/js/all';
 
 // Styles
 import './style/style.scss';
 import './style/buttons-min.css';
+import './style/menus-min.css';
 import 'animate.css/animate.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material-darker.css';
 import 'codemirror/mode/javascript/javascript';
+import 'tippy.js/dist/tippy.css';
 
 User.subscribe(() => {
   let user = User.getState();
