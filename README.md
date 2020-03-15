@@ -44,8 +44,10 @@ $ yarn server:dev
 - [x] Live edit
 - [x] Merge on new writer joined in room
 - [x] List writers
-- [ ] Display writer name
-- [ ] Github Login
-- [ ] Update users
+- [x] Display writer name
+- [x] Github Login
+- [x] Update users
 - [ ] Multi cursors
 - [ ] Share button
+- [ ] Save on gist
+- [ ] Import from gist
