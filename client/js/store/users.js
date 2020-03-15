@@ -13,7 +13,7 @@ function Users(users = [], action) {
       
       return users;
     case 'remove':
-      let removeIndex = users.findIndex((item) => item.id === user.id);
+      let removeIndex = users.findIndex((item) => item.socketId === user);
       if (removeIndex > -1) users.splice(removeIndex, 1);
       
       return users;
