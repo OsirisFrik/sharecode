@@ -6,6 +6,10 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .CodeMirror {
   height: 100vh !important;
 }
@@ -80,5 +84,31 @@ body {
       position: relative;
       left: 135px;
     }
+  }
+}
+
+.menu-btn {
+  position: fixed;
+  z-index: 1000;
+  right: 10px;
+  top: 1%;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.menu {
+  position: fixed;
+  z-index: 1200;
+  right: 0;
+  top: 0;
+  width: 300px;
+  height: 100vh;
+  background-color: #ffffff;
+
+  .menu-exit {
+    position: absolute;
+    left: -30px;
+    color: #ffffff;
+    cursor: pointer;
   }
 }

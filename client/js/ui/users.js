@@ -1,8 +1,6 @@
 import tippy from 'tippy.js';
 import { Users, User } from '../store';
 
-import 'tippy.js/dist/tippy.css';
-
 const usersContainer = document.getElementById('users');
 
 Users.subscribe(() => {
