@@ -1,9 +1,9 @@
-import Socket from './js/socket';
+import Socket from './js/libs/socket';
 import { User, Users } from './js/store';
-import Editor from './js/editor';
+import Editor from './js/libs/editor';
 import { removeUser, meUser, removeUsers } from './js/ui/users';
 import './js/ui/login';
-import './js/github';
+import './js/libs/github';
 
 // Styles
 import './style/style.scss';
