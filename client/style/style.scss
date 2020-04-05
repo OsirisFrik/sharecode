@@ -2,8 +2,13 @@
 
 body {
   margin: 0 !important;
-  height: 100vh;
+  overflow-y: hidden;
   font-family: 'Roboto', sans-serif;
+}
+
+#editor {
+  height: 100vh;
+  width: 100vw;
 }
 
 .pointer {

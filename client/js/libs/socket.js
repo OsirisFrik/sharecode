@@ -7,7 +7,7 @@ import {
 } from '../store';
 
 class Socket extends EventEmitter {
-  constructor(room, editor) {
+  constructor(room) {
     super();
     this.emitUpdateUser = true;
     this.room = room;
@@ -23,14 +23,14 @@ class Socket extends EventEmitter {
     this.socket.on('merge', (data) => this.onMerge(data));
     this.socket.on('newEditor', (data) => this.onNewEditor(data));
     this.socket.on('removeEditor', (data) => this.onRemoveEditor(data));
-    this.socket.on('+input', (data) => this.onAddInput(data));
+    this.socket.on('remote-input', (data) => this.onRemoteInput(data));
     this.socket.on('+delete', (data) => this.onRemoveInput(data));
     this.socket.on('disconnect', (data) => this.onDisconnect(data));
 
     User.subscribe(() => this.emitUpdateMyUser());
   }
 
-  onConnect(data) {
+  onConnect() {
     console.log('Socket connected');
     Notification.success('Connected');
     User.dispatch({
@@ -41,7 +41,7 @@ class Socket extends EventEmitter {
     });
   }
 
-  onDisconnect(data) {
+  onDisconnect() {
     Notification.error('Disconnected!');
     this.emit('disconnected');
   }
@@ -107,13 +107,13 @@ class Socket extends EventEmitter {
       Users.dispatch({
         type: 'add',
         user: data.user
-      })
+      });
     }
   }
 
-  onAddInput({ sender, data }) {
+  onRemoteInput({ sender, data }) {
     if (sender !== this.socket.id) {
-      this.emit('+input', data);
+      this.emit('remote-input', data);
     }
   }
 

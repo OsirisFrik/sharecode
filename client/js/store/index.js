@@ -4,4 +4,4 @@ import Users from './users';
 export {
   User,
   Users
-}
+};

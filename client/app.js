@@ -1,6 +1,6 @@
 import Socket from './js/libs/socket';
-import { User, Users } from './js/store';
-import Editor from './js/libs/editor';
+import { User } from './js/store';
+import MonacoEditor from './js/libs/monaco';
 import { removeUser, meUser, removeUsers } from './js/ui/users';
 import './js/ui/login';
 import './js/libs/github';
@@ -34,19 +34,18 @@ User.subscribe(() => {
   meUser(user);
 });
 
-const editor = new Editor();
+const mEditor = new MonacoEditor();
+// const editor = new Editor();
 const room = location.pathname.substring(1);
 const socket = new Socket(room);
 
-editor.on('change', (change) => {
-  if (['+input', '+delete'].includes(change.origin)) {
-    socket.socket.emit(change.origin, change);
-  }
+mEditor.on('change', (change) => {
+  socket.socket.emit('remote-input', change);
 });
 
-socket.on('+input', editor.remoteEdit);
-socket.on('+delete', editor.remoteEdit);
-socket.on('merge', (value) => editor.setValue(value));
-socket.on('getEditorValue', (cb) => cb(editor.getValue()));
+socket.on('remote-input', (data) => mEditor.setValue(data));
+// socket.on('+delete', editor.remoteEdit);
+// socket.on('merge', (value) => editor.setValue(value));
+// socket.on('getEditorValue', (cb) => cb(editor.getValue()));
 socket.on('removeUser', (user) => removeUser(user));
 socket.on('disconnected', () => removeUsers());

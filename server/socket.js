@@ -7,8 +7,8 @@ function init(app) {
     let room = socket.handshake.query.room;
 
     socket.join(room);
-    socket.on('+input', (data) => {
-      io.to(room).emit('+input', {
+    socket.on('remote-input', (data) => {
+      io.to(room).emit('remote-input', {
         sender: socket.id,
         data
       });
@@ -19,7 +19,7 @@ function init(app) {
         sender: socket.id,
         data
       });
-    })
+    });
 
     io.to(room).emit('newEditor', socket.id);
 

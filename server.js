@@ -10,13 +10,15 @@ const axios = require('axios').default;
 
 const app = express();
 const server = http.Server(app);
-const io = socketio(server);
+
 const gitReq = axios.create({
   baseURL: 'https://github.com',
   headers: {
     Accept: 'application/json'
   }
-})
+});
+
+socketio(server);
 
 app.use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json())
@@ -55,7 +57,6 @@ app.get('/login', async (req, res) => {
     if (auth.access_token) {
       res.cookie('github-token', auth.access_token);
     }
-    console.log(data)
   } catch (err) {
     req.cookies.loginFail = true;
     if (req.cookies.room) {

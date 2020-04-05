@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 const path = require('path');
 const HtmlWebpackkPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
@@ -8,13 +9,18 @@ module.exports = {
   name: 'share-code',
   mode: 'development',
   entry: {
-    app: './client/app.js'
+    app: './client/app.js',
+    'editor.worker': 'monaco-editor/esm/vs/editor/editor.worker.js',
+    'json.worker': 'monaco-editor/esm/vs/language/json/json.worker',
+    'css.worker': 'monaco-editor/esm/vs/language/css/css.worker',
+    'html.worker': 'monaco-editor/esm/vs/language/html/html.worker',
+    'ts.worker': 'monaco-editor/esm/vs/language/typescript/ts.worker',
   },
   output: {
     globalObject: 'self',
     path: path.resolve(__dirname, 'public/src'),
     filename: '[name].bundle.js',
-    publicPath: '/src'
+    publicPath: '/src/'
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -44,7 +50,11 @@ module.exports = {
           'style-loader',
           'css-loader'
         ]
+      },
+      {
+        test: /\.ttf$/,
+        use: ['file-loader']
       }
     ]
   }
-}
+};
